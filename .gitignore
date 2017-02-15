@@ -87,3 +87,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Mac
+.DS_Store
+
+# Data
+data/*.csv
+data/*.txt
