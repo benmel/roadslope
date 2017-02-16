@@ -1,6 +1,7 @@
 import csv
 from probe_point import ProbePoint
 from link import Link
+from node import Node
 
 def parse_probe_points(filename):
   probe_points = []
@@ -17,3 +18,10 @@ def parse_link_data(filename):
     for line in csvreader:
       links.append(Link(*line))
   return links
+
+def extract_nodes(links):
+  nodes = []
+  for link in links:
+    for shape_point in link.shape_points:
+      nodes.append(Node(shape_point[0], shape_point[1], shape_point[2], link))
+  return nodes

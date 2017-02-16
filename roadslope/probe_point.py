@@ -10,4 +10,5 @@ class ProbePoint:
     self.altitude = int(altitude)
     self.speed = int(speed)
     self.heading = int(heading)
+    self.closest_node = None
     self.closest_link = None
