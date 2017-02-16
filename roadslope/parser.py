@@ -11,9 +11,9 @@ def parse_probe_points(filename):
   return probe_points
 
 def parse_link_data(filename):
-  link_data = []
+  links = []
   with open(filename, 'r') as f:
     csvreader = csv.reader(f)
     for line in csvreader:
-      link_data.append(Link(*line))
-  return link_data
+      links.append(Link(*line))
+  return links
