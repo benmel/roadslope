@@ -1,3 +1,5 @@
+import math
+
 class Link:
   def __init__(self, link_pvid, ref_node_id, nref_node_id, length, functional_class, direction_of_travel, 
     speed_category, from_ref_speed_limit, to_ref_speed_limit, from_ref_num_lanes, to_ref_num_lanes, 
@@ -36,3 +38,24 @@ class Link:
     else:
       slope_points = None
     return slope_points
+
+  def calculate_slope(self):
+    if len(self.matched_probe_points) > 1:
+      self.matched_probe_points.sort(key=lambda x: x.latitude)
+      start_point = self.matched_probe_points[0]
+      end_point = self.matched_probe_points[-1]
+      dx = haversine_distance(start_point.latitude, start_point.longitude, end_point.latitude, end_point.longitude)
+      dy = end_point.altitude - start_point.altitude
+      slope = dy / dx
+      self.calculated_slope = math.degrees(math.atan(slope))
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+  radius = 6371000
+  dLat = math.radians(lat2 - lat1)
+  dLon = math.radians(lon2 - lon1)
+  lat1 = math.radians(lat1)
+  lat2 = math.radians(lat2)
+
+  a = math.sin(dLat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dLon/2)**2
+  c = 2 * math.asin(math.sqrt(a))
+  return radius * c

@@ -11,4 +11,4 @@ class ProbePoint:
     self.speed = int(speed)
     self.heading = int(heading)
     self.closest_node = None
-    self.closest_link = None
+    self.matched_link = None
