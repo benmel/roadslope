@@ -23,12 +23,13 @@ def get_nodes_index(nodes):
 
   return nodes_index
 
-def add_closest_link(probe_points, nodes, nodes_index):
+def add_matched_link(probe_points, nodes, nodes_index):
   for probe_point in probe_points:
     closest_node = find_closest_node(probe_point.latitude, probe_point.longitude, nodes, nodes_index)
     if closest_node:
       probe_point.closest_node = closest_node
-      probe_point.closest_link = closest_node.link
+      probe_point.matched_link = closest_node.link
+      closest_node.link.matched_probe_points.append(probe_point)
 
 def find_closest_node(latitude, longitude, nodes, nodes_index):
   closest_node = None

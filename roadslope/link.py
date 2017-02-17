@@ -18,7 +18,9 @@ class Link:
     self.time_zone = float(time_zone)
     self.shape_points = self.parse_shape_info(shape_info)
     self.curvature_info = curvature_info
-    self.slope_info = slope_info
+    self.slope_points = self.parse_slope_info(slope_info)
+    self.matched_probe_points = []
+    self.calculated_slope = None
 
   def parse_shape_info(self, shape_info):
     shape_points = map(lambda x: x.split('/'), shape_info.split('|'))
@@ -26,3 +28,11 @@ class Link:
       shape_point[:2] = map(float, shape_point[:2])
       shape_point[2] = float(shape_point[2]) if shape_point[2] else None
     return shape_points
+
+  def parse_slope_info(self, slope_info):
+    slope_points = map(lambda x: x.split('/'), slope_info.split('|'))
+    if slope_points[0][0]:
+      slope_points = [map(float, slope_point) for slope_point in slope_points]
+    else:
+      slope_points = None
+    return slope_points
