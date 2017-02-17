@@ -18,8 +18,10 @@ class Link:
     self.multi_digitized = multi_digitized == 'T'
     self.urban = urban == 'T'
     self.time_zone = float(time_zone)
+    self.shape_info = shape_info
     self.shape_points = self.parse_shape_info(shape_info)
     self.curvature_info = curvature_info
+    self.slope_info = slope_info
     self.slope_points = self.parse_slope_info(slope_info)
     self.matched_probe_points = []
     self.calculated_slope = None
@@ -53,7 +55,19 @@ class Link:
   def calculate_percent_error_slope(self):
     if self.slope_points and self.calculated_slope:
       expected_slope = self.slope_points[-1][1]
-      self.percent_error_slope = (self.calculated_slope - expected_slope) / expected_slope * 100
+      if expected_slope != 0:
+        self.percent_error_slope = (self.calculated_slope - expected_slope) / expected_slope * 100
+
+  def csv_output(self):
+    matched_probe_points_ids_strings = []
+    matched_probe_points_info_strings = []
+    for point in self.matched_probe_points:
+      matched_probe_points_ids_strings.append(str(point.sample_id))
+      matched_probe_points_info_strings.append('/'.join(map(str, [point.latitude, point.longitude, point.altitude])))
+    matched_probe_points_ids = '|'.join(matched_probe_points_ids_strings)
+    matched_probe_points_info = '|'.join(matched_probe_points_info_strings)
+    return [self.link_pvid, self.ref_node_id, self.nref_node_id, self.length, self.shape_info, self.slope_info,
+            matched_probe_points_ids, matched_probe_points_info, self.calculated_slope, self.percent_error_slope]
 
 def haversine_distance(lat1, lon1, lat2, lon2):
   radius = 6371000

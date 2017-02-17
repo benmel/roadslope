@@ -1,5 +1,6 @@
 import parser
 import map_match
+import csv
 
 def load_data(link_data_filename, probe_points_filename):
   links = parser.parse_link_data(link_data_filename)
@@ -18,3 +19,18 @@ def calculate_links_slope(links):
     link.calculate_slope()
     link.calculate_percent_error_slope()
   return links
+
+def output_links(links, output_filename):
+  with open(output_filename, 'wb') as f:
+    writer = csv.writer(f, delimiter=',')
+    for link in links:
+      writer.writerow(link.csv_output())
+
+def output_unmatched(probe_points, output_filename):
+  unmatched = 0
+  for probe_point in probe_points:
+    if probe_point.matched_link is None:
+      unmatched += 1
+  with open(output_filename, 'wb') as f:
+    f.write('Number of probe points: ' + str(len(probe_points)))
+    f.write('\nNumber of unmatched probe points: ' + str(unmatched))
