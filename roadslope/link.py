@@ -23,6 +23,7 @@ class Link:
     self.slope_points = self.parse_slope_info(slope_info)
     self.matched_probe_points = []
     self.calculated_slope = None
+    self.percent_error_slope = None
 
   def parse_shape_info(self, shape_info):
     shape_points = map(lambda x: x.split('/'), shape_info.split('|'))
@@ -48,6 +49,11 @@ class Link:
       dy = end_point.altitude - start_point.altitude
       slope = dy / dx
       self.calculated_slope = math.degrees(math.atan(slope))
+
+  def calculate_percent_error_slope(self):
+    if self.slope_points and self.calculated_slope:
+      expected_slope = self.slope_points[-1][1]
+      self.percent_error_slope = (self.calculated_slope - expected_slope) / expected_slope * 100
 
 def haversine_distance(lat1, lon1, lat2, lon2):
   radius = 6371000
