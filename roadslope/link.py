@@ -49,8 +49,9 @@ class Link:
       end_point = self.matched_probe_points[-1]
       dx = haversine_distance(start_point.latitude, start_point.longitude, end_point.latitude, end_point.longitude)
       dy = end_point.altitude - start_point.altitude
-      slope = dy / dx
-      self.calculated_slope = math.degrees(math.atan(slope))
+      if dx != 0:
+        slope = dy / dx
+        self.calculated_slope = math.degrees(math.atan(slope))
 
   def calculate_percent_error_slope(self):
     if self.slope_points and self.calculated_slope:
